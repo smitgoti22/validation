@@ -1,0 +1,168 @@
+import 'package:flutter/material.dart';
+
+class SignupValidation extends StatefulWidget {
+  const SignupValidation({Key? key}) : super(key: key);
+
+  @override
+  State<SignupValidation> createState() => _SignupValidationState();
+}
+
+class _SignupValidationState extends State<SignupValidation> {
+  final GlobalKey<FormState> _globalKeyForEmailVdl = GlobalKey<FormState>();
+  final GlobalKey<FormState> _globalKeyForPassVdl = GlobalKey<FormState>();
+
+  TextEditingController _editingControllerForEmail = TextEditingController();
+  TextEditingController _editingControllerForPass = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: NetworkImage(
+                  "https://img.freepik.com/free-vector/flying-green-leaves-white-background-spring-leaf-pattern-isolated-backdrop-leaves-plant-vector_90220-858.jpg?w=740&t=st=1669092482~exp=1669093082~hmac=7e84511d8a40645aca5bc7b9a7581a258cf476037d81e89bdad4619e4c37be09"),
+              fit: BoxFit.cover)),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.green),
+        home: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                ),
+                Form(
+                  key: _globalKeyForEmailVdl,
+                  child: TextFormField(
+                    controller: _editingControllerForEmail,
+                    onChanged: (value) {
+                      _globalKeyForEmailVdl.currentState!.validate();
+                    },
+                    validator: (value) {
+                      final bool emailValidation = RegExp(
+                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                          .hasMatch(value!);
+
+                      if (emailValidation) {
+                      } else {
+                        return "Please Enter Valid Email.";
+                      }
+                    },
+                    cursorColor: Colors.black,
+                    cursorHeight: 20,
+                    decoration: InputDecoration(
+                      hintText: "Email",
+                      hintStyle: TextStyle(
+                          fontSize: 13, color: Colors.black.withOpacity(0.4)),
+                      filled: true,
+                      contentPadding:
+                          const EdgeInsets.only(left: 40, top: 10, bottom: 10),
+                      fillColor: Colors.grey.shade700.withOpacity(0.05),
+                      hintTextDirection: TextDirection.values[1],
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              const BorderSide(color: Colors.transparent)),
+                      prefixIcon: Icon(Icons.email),
+                      prefixIconColor: Colors.black.withOpacity(0.4),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Form(
+                  key: _globalKeyForPassVdl,
+                  child: TextFormField(
+                    controller: _editingControllerForPass,
+                    onChanged: (value) {
+                      _globalKeyForPassVdl.currentState!.validate();
+                    },
+                    validator: (value) {
+                      final bool passwordValidation = RegExp(
+                              r'^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[!@#\$&*~]).{8,}$')
+                          .hasMatch(value!);
+
+                      if (passwordValidation) {
+                        return null;
+                      } else {
+                        return "Please Enter Valid password.";
+                      }
+                    },
+                    cursorColor: Colors.black,
+                    cursorHeight: 20,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Password",
+                      hintStyle: TextStyle(
+                          fontSize: 13, color: Colors.black.withOpacity(0.4)),
+                      filled: true,
+                      contentPadding:
+                          const EdgeInsets.only(left: 40, top: 10, bottom: 10),
+                      fillColor: Colors.grey.shade700.withOpacity(0.05),
+                      hintTextDirection: TextDirection.values[1],
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide:
+                              const BorderSide(color: Colors.transparent)),
+                      prefixIcon: Icon(Icons.lock),
+                      prefixIconColor: Colors.black.withOpacity(0.4),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Container(
+                  height: 55,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                  child: Builder(builder: (context) {
+                    return MaterialButton(
+                      onPressed: () {
+                        print("object");
+                        if (_globalKeyForEmailVdl.currentState!.validate() &&
+                            _globalKeyForPassVdl.currentState!.validate()) {
+                          if (_editingControllerForEmail.text ==
+                                  "admin@gmail.com" &&
+                              _editingControllerForPass.text == "Admin@123") {
+                            print("valid");
+                            //Navigate to Home Page
+
+                          } else {
+                            print("object1");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Invalid Login...!")));
+                          }
+                        } else {
+                          print("validation Error");
+                        }
+                      },
+                      color: Colors.green,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(35)),
+                      child: const Text(
+                        "LOGIN",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
